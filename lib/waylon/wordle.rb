@@ -33,7 +33,7 @@ module Waylon
     end
 
     def self.todays_number
-      (Date.today - Date.new(2021, 6, 19)).to_i
+      (DateTime.now.new_offset("-05:00").to_date - Date.new(2021, 6, 19)).to_i
     end
 
     def self.for_today

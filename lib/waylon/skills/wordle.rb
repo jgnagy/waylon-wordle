@@ -75,7 +75,7 @@ module Waylon
       end
 
       def solve_todays_wordle
-        cache("solution_#{Date.today}", expires: 24 * 60 * 60) do
+        cache("solution_#{DateTime.now.new_offset("-05:00").to_date}", expires: 24 * 60 * 60) do
           solver = Waylon::Wordle::Solver.new(Waylon::Wordle.random_startword)
           solver.solve_todays_wordle
         end

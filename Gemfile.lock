@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    waylon-wordle (0.1.0)
+    waylon-wordle (0.1.1)
       waylon-core (~> 0.1)
 
 GEM
@@ -29,20 +29,21 @@ GEM
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.3)
-      multipart-post (>= 1.2, < 3)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
+    ffi (1.15.5)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     json (2.6.2)
     moneta (1.5.1)
     mono_logger (1.1.1)
     multi_json (1.15.0)
-    multipart-post (2.2.0)
+    multipart-post (2.2.3)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
@@ -57,6 +58,8 @@ GEM
       rack
     rainbow (3.1.1)
     rake (13.0.6)
+    rbnacl (7.1.1)
+      ffi
     redis (4.6.0)
     redis-namespace (1.8.2)
       redis (>= 3.0.4)
@@ -110,13 +113,14 @@ GEM
       tilt (~> 2.0)
     tilt (2.0.10)
     unicode-display_width (2.1.0)
-    waylon-core (0.1.4)
+    waylon-core (0.1.9)
       addressable (~> 2.8)
       faraday (~> 1.8)
       i18n (~> 1.8)
       json (~> 2.6)
       moneta (~> 1.4)
       puma (~> 5.5)
+      rbnacl (~> 7.1)
       resque (~> 2.2)
     webrick (1.7.0)
     yard (0.9.28)
