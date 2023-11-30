@@ -5,8 +5,9 @@ RSpec.describe Waylon::Wordle do
     expect(Waylon::Wordle::VERSION).not_to be nil
   end
 
-  it "loads the answers" do
-    expect(Waylon::Wordle.answers).to be_an(Array)
-    expect(Waylon::Wordle.answers.first).to eq("cigar")
+  it "loads the vocabulary" do
+    expect(Waylon::Wordle.vocabulary).to be_an(Array)
+    expect(Waylon::Wordle.vocabulary.first).to eq("aahed")
+    expect(Waylon::Wordle.vocabulary.last).to eq("zymic")
   end
 end

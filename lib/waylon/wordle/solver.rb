@@ -60,7 +60,7 @@ module Waylon
       end
 
       def find_potential_solution(hits, near_hits, misses)
-        potential_solutions = Waylon::Wordle.answers.map(&:chars).reject do |word|
+        potential_solutions = Waylon::Wordle.vocabulary.map(&:chars).reject do |word|
           word.intersect?(misses)
         end
 

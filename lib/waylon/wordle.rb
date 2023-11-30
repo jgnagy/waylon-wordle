@@ -12,7 +12,7 @@ module Waylon
     class Error < StandardError; end
     # Your code goes here...
 
-    def self.answers_file
+    def self.vocabulary_file
       # First, try the official data path for the gem, then pull from a relative path
       relative_path = if File.exist?(Gem.datadir("waylon-wordle"))
                         Gem.datadir("waylon-wordle")
@@ -21,23 +21,41 @@ module Waylon
                           File.dirname(__FILE__), "..", "..", "data"
                         )
                       end
-      File.expand_path(File.join(relative_path, "answers.json"))
+      File.expand_path(File.join(relative_path, "vocabulary.json"))
     end
 
-    def self.answers
-      @answers ||= JSON.load_file(answers_file)
+    def self.vocabulary
+      @vocabulary ||= JSON.load_file(vocabulary_file)
     end
 
     def self.random_startword
-      answers.select { |word| word.chars.intersection(%w[a e i o u]).uniq.size >= 3 }.sample
+      vocabulary.select { |word| word.chars.intersection(%w[a e i o u]).uniq.size >= 3 }.sample
+    end
+
+    def self.todays_date
+      DateTime.now.new_offset("-05:00").to_date
     end
 
     def self.todays_number
-      (DateTime.now.new_offset("-05:00").to_date - Date.new(2021, 6, 19)).to_i
+      (todays_date - Date.new(2021, 6, 19)).to_i
+    end
+
+    def self.data_for_today
+      conn = Faraday.new(
+        headers: {
+          "User-Agent": "Waylon/Wordle",
+          accept: "application/json",
+          "Accept-Language": "en-US,en;q=0.5",
+          referer: "https://www.nytimes.com/games/wordle/index.html"
+        }
+      )
+      response = conn.get("https://www.nytimes.com/svc/wordle/v2/#{todays_date}.json")
+
+      JSON.parse(response.body)
     end
 
     def self.for_today
-      answers[todays_number]
+      data_for_today["solution"]
     end
   end
 end
