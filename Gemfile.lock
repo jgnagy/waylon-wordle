@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    waylon-wordle (0.1.2)
+    waylon-wordle (0.2.0)
       waylon-core (~> 0.1)
 
 GEM

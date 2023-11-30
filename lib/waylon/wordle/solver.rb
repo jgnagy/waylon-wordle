@@ -26,7 +26,7 @@ module Waylon
           attempt.each_with_index do |letter, index|
             if letter == answer[index]
               hits[index] = letter
-            elsif answer.include?(letter)
+            elsif answer.include?(letter) && hits.count(letter) < answer.count(letter)
               near_hits[index] ||= []
               near_hits[index] << letter
             else
@@ -53,7 +53,7 @@ module Waylon
           next unless letters && !letters.empty?
 
           return false if letters.include?(exploded_word[index])
-          return false unless exploded_word.intersect?(letters)
+          return false unless (letters - exploded_word).empty?
         end
 
         true
