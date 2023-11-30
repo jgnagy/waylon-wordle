@@ -14,7 +14,8 @@ module Waylon
         answer = Waylon::Wordle.for_today.chars
         attempts = [startword.chars]
         attempts << make_attempt(answer, attempts) until attempts.last == answer || attempts.size == 6
-        attempts
+
+        attempts.compact
       end
 
       def make_attempt(answer, attempts)
@@ -22,7 +23,7 @@ module Waylon
         near_hits = []
         misses = []
 
-        attempts.each do |attempt|
+        attempts.compact.each do |attempt|
           attempt.each_with_index do |letter, index|
             if letter == answer[index]
               hits[index] = letter
