@@ -24,7 +24,7 @@ module Waylon
 
       def todays_wordle
         solution = solve_todays_wordle
-        case solution.size
+        case solution.attempts.size
         when 1..2
           reply("I got *really* lucky today!")
         when 3
@@ -32,44 +32,40 @@ module Waylon
         when 4..5
           reply("I managed to figure it out.")
         when 6
-          reply("I barely solved it!")
-        else
-          reply("Unfortunately, I didn't solve it.")
+          if solution.last_attempted_word == Waylon::Wordle.for_today
+            reply("I barely solved it!")
+          else
+            reply("Unfortunately, I didn't solve it.")
+          end
         end
 
-        reply(formatted_wordle_score(solution))
+        reply(formatted_wordle_score(solution.attempts.map { _1[:result] }))
       end
 
       def spoil_wordle
         threaded_reply("Here's what my attempt looked like...")
         threaded_reply(
           codify(
-            JSON.pretty_generate(solve_todays_wordle.map { |w| w.join.upcase })
+            JSON.pretty_generate(solve_todays_wordle.attempts.map { |w| w[:word].upcase })
           )
         )
       end
 
       private
 
-      def formatted_wordle_score(solution)
-        miss = "⬛"
-        hit = "🟩"
-        near_hit = "🟨"
-        todays_answer = Waylon::Wordle.for_today.chars
-        solved_in = solution.include?(todays_answer) ? solution.size : "X"
+      def formatted_wordle_score(scores)
+        translation = {
+          miss: "⬛",
+          hit: "🟩",
+          near_hit: "🟨"
+        }
+
+        solved_in = scores.last.map(&:to_sym) == %i[hit hit hit hit hit] ? scores.size : "X"
 
         lines = ["Wordle #{Waylon::Wordle.todays_number} #{solved_in}/6"]
         lines << ""
-        solution.each do |word|
-          lines << word.map.with_index do |letter, index|
-            if letter == todays_answer[index]
-              hit
-            elsif todays_answer.include?(letter)
-              near_hit
-            else
-              miss
-            end
-          end.join
+        scores.each do |score|
+          lines << score.map { translation[_1.to_sym] }.join
         end
         lines.join("\n")
       end
@@ -78,6 +74,7 @@ module Waylon
         cache("solution_#{DateTime.now.new_offset("-05:00").to_date}", expires: 24 * 60 * 60) do
           solver = Waylon::Wordle::Solver.new(Waylon::Wordle.random_startword)
           solver.solve_todays_wordle
+          solver
         end
       end
     end
