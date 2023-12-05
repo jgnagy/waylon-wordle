@@ -29,7 +29,13 @@ module Waylon
     end
 
     def self.random_startword
-      vocabulary.select { |word| word.chars.intersection(%w[a e i o u]).uniq.size >= 3 }.sample
+      vocabulary.select do |word|
+        if rand(10) > 5
+          word.chars.uniq.intersection(%w[a e i o u]).uniq.size >= 4
+        else
+          word.chars.uniq.intersection(%w[a e o s t r n]).uniq.size >= 4
+        end
+      end.sample
     end
 
     def self.todays_date

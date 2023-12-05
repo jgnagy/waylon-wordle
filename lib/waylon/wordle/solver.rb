@@ -43,9 +43,11 @@ module Waylon
       def find_potential_solution
         potential_solutions = Waylon::Wordle.vocabulary.map(&:chars).reject { _1.intersect?(misses) }
 
-        potential_solutions.select do |word|
+        candidates = potential_solutions.select do |word|
           hits_match?(hits, word) && near_hits_match?(near_hits, word)
-        end.sample
+        end
+
+        candidates.shuffle.max_by { _1.uniq.size }
       end
 
       def last_attempted_word = attempts.last[:word]

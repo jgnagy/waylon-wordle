@@ -7,7 +7,7 @@ RSpec.describe Waylon::Wordle do
 
   it "loads the vocabulary" do
     expect(Waylon::Wordle.vocabulary).to be_an(Array)
-    expect(Waylon::Wordle.vocabulary.first).to eq("aahed")
+    expect(Waylon::Wordle.vocabulary.first).to eq("aargh")
     expect(Waylon::Wordle.vocabulary.last).to eq("zymic")
   end
 end
